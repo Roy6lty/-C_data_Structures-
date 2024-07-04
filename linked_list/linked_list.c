@@ -28,12 +28,21 @@ void insert_end(Node **root, int value)
     // root is the address of the first pointer
     // iterating through next till the end is reached which is null
     // the pointing it to the new node
+
+    // check if the list is empty
     Node *curr = *root;
-    while (curr->next != NULL)
+    if (curr == NULL)
     {
-        curr = curr->next;
+        *root = new_node;
     }
-    curr->next = new_node;
+    else
+    {
+        while (curr->next != NULL)
+        {
+            curr = curr->next;
+        }
+        curr->next = new_node;
+    }
 }
 /**
  * in c ** is used to refer to a pointer
@@ -54,14 +63,69 @@ void insert_begining(Node **root, int value)
     *root = new_node; //*root is a pointer to type Node
 }
 
+void deallocate(Node **root, int index)
+{
+    Node *curr = NULL;
+    Node *next_current = NULL;
+    Node *previous = *root;
+    if (*root == NULL)
+    {
+        perror("NO nodes in list");
+    }
+
+    // Remove the first Node
+    if (index == 1)
+    {
+        *root = previous->next;
+        free(previous);
+        return;
+    }
+
+    // Iterate to spercific index
+    for (int i = 1; i < index - 1; i++)
+    {
+        previous = previous->next;
+    }
+    curr = previous->next;
+    if (curr->next == NULL) // last node in list
+    {
+        previous->next = NULL;
+        free(curr);
+        return;
+    }
+
+    if (curr->next != NULL) // Node in the middle
+    {
+
+        next_current = curr->next;
+        previous->next = next_current;
+    }
+    free(curr);
+}
+
+void insert_sorted(Node **root, int value)
+{
+    /**
+     * Insert in a sorted list and into
+     * the correct position
+     */
+}
+
 int main(int argc, char *argv[])
 {
-    Node *root = malloc(sizeof(Node));
+    /// Node *root = malloc(sizeof(Node));
     // if (root)
     Node *root = NULL;
     insert_begining(&root, 13);
     insert_begining(&root, 14);
     insert_begining(&root, 15);
+    insert_end(&root, 17);
+    insert_end(&root, 18);
+    insert_end(&root, 19);
+    insert_end(&root, 20);
+
+    deallocate(&root, 2);
+    deallocate(&root, 1);
 
     for (Node *curr = root; curr != NULL; curr = curr->next)
     {
