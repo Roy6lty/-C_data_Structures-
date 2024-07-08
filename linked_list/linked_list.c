@@ -3,6 +3,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 typedef struct Node
 {
     int x;
@@ -109,6 +110,67 @@ void insert_sorted(Node **root, int value)
      * Insert in a sorted list and into
      * the correct position
      */
+    Node *curr = *root;
+    Node *next_node = NULL;
+    Node *prev_node = NULL;
+
+    // first Node
+    if (*root == NULL)
+    {
+        Node *new_node = (Node *)malloc(sizeof(Node));
+        new_node->x = value;
+        new_node->next = NULL;
+
+        *root = new_node;
+        return;
+    }
+
+    // if more than one node
+
+    if (*root != NULL)
+    {
+        Node *new_node = (Node *)malloc(sizeof(Node));
+        new_node->x = value;
+        new_node->next = NULL;
+
+        // only one Node
+        if (curr->x >= value)
+        {
+            new_node->next = curr;
+            *root = new_node;
+            return;
+        }
+
+        prev_node = curr;
+        curr = prev_node->next;
+
+        int current_value = curr->x;
+
+        while (curr->next != NULL)
+        {
+            if (current_value >= value)
+            {
+                prev_node->next = new_node;
+                new_node->next = curr;
+                break;
+            }
+            prev_node = curr;
+            curr = prev_node->next;
+            current_value = curr->x;
+        }
+        if (curr->next == NULL)
+        {
+            if (current_value >= value)
+            {
+                prev_node->next = new_node;
+                new_node->next = curr;
+                return;
+            }
+            curr->next = new_node;
+            return;
+        }
+        return;
+    }
 }
 
 int main(int argc, char *argv[])
@@ -116,16 +178,28 @@ int main(int argc, char *argv[])
     /// Node *root = malloc(sizeof(Node));
     // if (root)
     Node *root = NULL;
-    insert_begining(&root, 13);
-    insert_begining(&root, 14);
-    insert_begining(&root, 15);
+    // insert_begining(&root, 13);
+    // insert_begining(&root, 20);
+    // insert_begining(&root, 15);
     insert_end(&root, 17);
     insert_end(&root, 18);
     insert_end(&root, 19);
-    insert_end(&root, 20);
+    // insert_end(&root, 20);
 
-    deallocate(&root, 2);
-    deallocate(&root, 1);
+    // deallocate(&root, 2);
+    // deallocate(&root, 1);
+    insert_sorted(&root, 10);
+    insert_sorted(&root, 2);
+    insert_sorted(&root, 1);
+    insert_sorted(&root, 11);
+    insert_sorted(&root, 3);
+    insert_sorted(&root, 13);
+    insert_sorted(&root, 5);
+    insert_sorted(&root, 8);
+    insert_sorted(&root, 15);
+    insert_sorted(&root, 14);
+    insert_sorted(&root, 17);
+    insert_sorted(&root, 16);
 
     for (Node *curr = root; curr != NULL; curr = curr->next)
     {
