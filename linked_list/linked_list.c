@@ -173,6 +173,61 @@ void insert_sorted(Node **root, int value)
     }
 }
 
+void reverse(Node **root)
+{
+    /**
+     * This function reverse an linked list
+     */
+    Node *head = *root;
+
+    Node *prev = *root;
+    Node *curr = NULL;
+    Node *next = NULL;
+
+    // if only one node exists
+    if (prev->next == NULL)
+    {
+        return;
+    }
+
+    curr = prev->next;
+    while (curr->next != NULL)
+    {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    curr->next = prev;
+
+    if (head->next != NULL)
+    {
+        head->next = NULL;
+    }
+    *root = curr;
+    return;
+}
+
+void reverse_recursive(Node **root)
+{
+    Node *prev = *root;
+    Node *curr = prev->next;
+
+    // Base case: end of the list
+    if (curr == NULL)
+    {
+        return;
+    }
+
+    // Recurse to the next node
+    reverse_recursive(&curr);
+
+    // Reverse the pointers
+    prev->next->next = prev;
+    prev->next = NULL;
+    *root = curr;
+}
+
 int main(int argc, char *argv[])
 {
     /// Node *root = malloc(sizeof(Node));
@@ -200,6 +255,8 @@ int main(int argc, char *argv[])
     insert_sorted(&root, 14);
     insert_sorted(&root, 17);
     insert_sorted(&root, 16);
+    reverse(&root);
+    reverse_recursive(&root);
 
     for (Node *curr = root; curr != NULL; curr = curr->next)
     {
